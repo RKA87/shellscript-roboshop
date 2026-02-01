@@ -2,7 +2,7 @@
 
 USER_ID=$(id -u)
 LOGS_DIR="/var/log/shell-roboshop"
-LOGS_FILE="$LOGS_DIR/$0.log"
+LOGS_FILE="$LOGS_DIR/mongodb.log"
 
 #Color Coding
 RED="\e[31m"
@@ -21,7 +21,7 @@ mkdir -p $LOGS_DIR
 
 #status check function to validate the installation status
 VALIDATE(){
-    if [$1 -ne 0]; then
+if [ $1 -ne 0 ]; then
         echo -e "$2 ... $RED FAILED $RESET" | tee -a $LOGS_FILE
         exit 1
     else
