@@ -17,7 +17,7 @@ if [ $USER_ID -ne 0 ]; then
 fi
 
 # Create logs directory if not exists
-mkrdir -p $LOGS_DIR
+mkdir -p $LOGS_DIR
 
 #status check function to validate the installation status
 VALIDATE(){
