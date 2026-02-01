@@ -30,7 +30,7 @@ do
                 --output text
             )
             echo "Instance created with Instance ID: $INSTANCE_ID and Public IP: $IP_ADDRESS"
-            RECORD_NAME="$instance.$DOMAIN_NAME"
+            RECORD_NAME="webapp.$DOMAIN_NAME"
         else
             IP_ADDRESS=$(
                 aws ec2 describe-instances \
