@@ -13,12 +13,12 @@ do
         --instance-type t3.micro \
         --security-group-ids $SG_ID \
         --tag-specifications "ResourceType=instance,Tags=[{Key=Name,Value=$instance}]" \
-        --query 'Instances[0].InstanceId' \ 
+        --query 'Instances[0].InstanceId' \
         --output text )
 
         if [ $instance == "frontend" ]; then
+            aws ec2 wait instance-running --instance-ids $INSTANCE_ID
             IP_ADDRESS=$(
-                aws ec2 wait instance-running --instance-ids $INSTANCE_ID
                 aws ec2 describe-instances \
                 --instance-ids $INSTANCE_ID \
                 --query 'Reservations[0].Instances[0].PublicIpAddress' \
@@ -27,8 +27,8 @@ do
             echo "Instance created with Instance ID: $INSTANCE_ID and Public IP: $IP_ADDRESS"
             RECORD_NAME="webapp.$DOMAIN_NAME"
         else
+            aws ec2 wait instance-running --instance-ids $INSTANCE_ID
             IP_ADDRESS=$(
-                aws ec2 wait instance-running --instance-ids $INSTANCE_ID
                 aws ec2 describe-instances \
                 --instance-ids $INSTANCE_ID \
                 --query 'Reservations[0].Instances[0].PrivateIpAddress' \
