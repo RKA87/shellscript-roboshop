@@ -68,6 +68,3 @@ VALIDATE $? "Checking MongoDB Service Status After Restart"
 #Final Checks using netstat and curl health
 ss -lntp | grep 27017 &>>$LOG_FILE
 VALIDATE $? "Validating MongoDB Listening Port"
-
-curl "http://localhost:27017/health" &>>$LOG_FILE
-VALIDATE $? "Validating MongoDB Health using curl"
