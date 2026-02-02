@@ -39,8 +39,7 @@ VALIDATE $? "Copying MongoDB Repo File"
 # First Check Mongodb is already installed or not
 
 if dnf list installed | grep mongodb-org; then
-        echo -e "$YELLOW MongoDB is already installed on the system $RESET" | tee -a $LOG_FILE
-        exit 0        
+        echo -e "$YELLOW MongoDB is already installed on the system $RESET" | tee -a $LOG_FILE    
     else
         echo -e "$YELLOW MongoDB is not installed on the system we are proceeding with the installation" | tee -a $LOG_FILE
         dnf install mongodb-org -y &>>$LOG_FILE
@@ -67,8 +66,8 @@ systemctl status mongod &>>$LOG_FILE
 VALIDATE $? "Checking MongoDB Service Status After Restart"
 
 #Final Checks using netstat and curl health
-netstat -lntp | tee -a $LOG_FILE
-validate $? "Validating MongoDB Listening Port"
+ss -lntp | grep 27017 &>>$LOG_FILE
+VALIDATE $? "Validating MongoDB Listening Port"
 
-curl "https://localhost:27017" &>>$LOG_FILE
+curl "http://localhost:27017" &>>$LOG_FILE
 VALIDATE $? "Validating MongoDB Health using curl"
