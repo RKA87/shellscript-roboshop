@@ -35,14 +35,21 @@ VALIDATE() {
     fi
 }
 
-dnf module disable nodejs -y &>>$LOG_FILE
-VALIDATE $? "Disabling NodeJS Module"
+#First check the NodeJS is already installed or not
 
-dnf module enable nodejs:20 -y &>>$LOG_FILE
-VALIDATE $? "Enabling NodeJS 20 Module"
-
-dnf install nodejs -y &>>$LOG_FILE
-VALIDATE $? "Installing NodeJS"
+if dnf list installed | grep "nodejs"; then
+        echo -e "$YELLOW NodeJS is already installed on the system $RESET" | tee -a $LOG_FILE
+        dnf remove nodejs -y &>>$LOG_FILE
+        VALIDATE $? "Removing existing NodeJS"
+        rm -rf ~/.npm ~/.node-gyp /usr/lib/node_modules &>>$LOG_FILE
+        VALIDATE $? "Removing existing NodeJS files"
+    else
+        echo -e "$YELLOW NodeJS is not installed on the system we are proceeding with the installation" | tee -a $LOG_FILE
+        dnf module disable nodejs -y &>>$LOG_FILE
+        dnf module enable nodejs:24 -y &>>$LOG_FILE
+        dnf install nodejs -y &>>$LOG_FILE
+        VALIDATE $? "Installing NodeJS"
+fi
 
 if id roboshop &>>$LOG_FILE; then
     echo -e "$YELLOW roboshop user already exists $RESET" | tee -a $LOG_FILE
