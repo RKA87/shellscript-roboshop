@@ -16,7 +16,7 @@ LOG_DIR=/var/log/shellscript-roboshop
 if [ ! -d $LOG_DIR ]; then
         echo -n "Creating log directory"
         mkdir -p $LOG_DIR
-    else:
+    else
         echo -n "log directory already exists"
 fi
 
