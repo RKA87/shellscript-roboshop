@@ -1,9 +1,5 @@
 #!/bin/bash
 
-first we need to check the sudo account access 
-second need log directory
-third lod file creation
-
 #Color Coding
 RED="\e[31m"
 GREEN="\e[32m"
