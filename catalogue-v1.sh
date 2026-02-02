@@ -104,4 +104,5 @@ systemctl restart catalogue &>>$LOG_FILE
 VALIDATE $? "Restarting Catalogue Service"
 
 ss -lntp | grep 8080 &>>$LOG_FILE
+curl http://localhost:8080/health &>>$LOG_FILE
 VALIDATE $? "Validating Catalogue Service Listening Port"
