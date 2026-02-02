@@ -70,7 +70,7 @@ VALIDATE $? "Extracting Catalogue Application Code"
 npm install &>>$LOG_FILE
 VALIDATE $? "Installing NodeJS Dependencies"
 
-cp $SCRIPT_DIRcatalogue.service /etc/systemd/system/catalogue.service &>>$LOG_FILE
+cp $SCRIPT_DIR/catalogue.service /etc/systemd/system/catalogue.service &>>$LOG_FILE
 VALIDATE $? "Copying Catalogue SystemD Service File and creating catalogue.service"
 
 systemctl daemon-reload
@@ -83,7 +83,7 @@ VALIDATE $? "Starting Catalogue Service"
 systemctl status catalogue.service
 validate $? "Catalogue Service Status"
 
-cp $SCRIPT_DIRmongo.repo /etc/yum.repos.d/mongo.repo &>>$LOG_FILE #need to give absolute path in CP command
+cp $SCRIPT_DIR/mongo.repo /etc/yum.repos.d/mongo.repo &>>$LOG_FILE #need to give absolute path in CP command
 VALIDATE $? "Copying MongoDB Repo File"
 
 dnf install mongodb-mongosh -y &>>$LOG_FILE
