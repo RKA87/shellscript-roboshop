@@ -5,8 +5,6 @@ AMI_ID="ami-0220d79f3f480ecf5"
 ROUTE53_ZONE_ID="Z032594897Q2I0KZ7GR1"
 DOMAIN_NAME="rkak87.online"
 
-#Instance Build
-
 for instance in $@
 do
     echo -n "Creating EC2 Instance:$instance"
