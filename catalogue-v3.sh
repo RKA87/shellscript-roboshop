@@ -35,7 +35,7 @@ VALIDATE(){
 
 
 #Install NodeJS
-if dns list installed | grep nodejs; then
+if dnf list installed | grep nodejs; then
   echo -e "$YELLOW NodeJS is already installed on the system $RESET" | tee -a $LOG_FILE
 else
   echo -e "$YELLOW NodeJS is not installed on the system we are proceeding with the installation $RESET" | tee -a $LOG_FILE
@@ -46,12 +46,12 @@ else
 fi
 
 #Add Application User
-id roboshop | tee -a $LOG_FILE
-if [ $? -ne 0 ]; then
-    useradd roboshop &>>$LOG_FILE
-    VALIDATE $? "Adding Application User"
+if id roboshop &>>$LOG_FILE; then
+  echo -e "$YELLOW User roboshop already exists on the system $RESET" | tee -a $LOG_FILE
 else
-    echo -e "$YELLOW User roboshop already exists on the system $RESET" | tee -a $LOG_FILE
+  echo -e "$YELLOW User roboshop does not exist on the system we are creating the user $RESET" | tee -a $LOG_FILE
+  useradd roboshop &>>$LOG_FILE
+  VALIDATE $? "Adding Application User"
 fi
 
 #Create Application Directory
@@ -59,7 +59,7 @@ mkdir -p /app &>>$LOG_FILE
 VALIDATE $? "Creating Application Directory"
 
 #Download the code
-curl -o /tmp/catalogue.zip https://roboshop-artifacts.s3.amazonaws.com/catalogue-v3.zip  &>>$LOGS_FILE
+curl -o /tmp/catalogue.zip https://roboshop-artifacts.s3.amazonaws.com/catalogue-v3.zip  &>>$LOG_FILE
 VALIDATE $? "Downloading Catalogue Code"
 
 cd /app
@@ -89,7 +89,7 @@ VALIDATE $? "Copying MongoDB Repo File"
 dnf install mongodb-mongosh -y &>>$LOG_FILE
 VALIDATE $? "Installing MongoDB Shell"
 
-INDEX=$(mongosh --host mongodb.rkaka87.online --quiet --eval 'db.getDBNames().indexOf("catalogue")' | tee -a $LOG_FILE)
+INDEX=$(mongosh --host mongodb.rkaka87.online --quiet --eval 'db.getDBNames().indexOf("catalogue")')
 if [ $INDEX -eq -1 ]; then
     mongosh --host mongodb.rkaka87.online --quiet < /app/db/master-data.js | tee -a $LOG_FILE
     VALIDATE $? "Loading Catalogue Data into MongoDB"
