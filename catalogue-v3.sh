@@ -90,7 +90,7 @@ dnf install mongodb-mongosh -y &>>$LOG_FILE
 VALIDATE $? "Installing MongoDB Shell"
 
 INDEX=$(mongosh --host mongodb.rkaka87.online --quiet --eval 'db.getDBNames().indexOf("catalogue")')
-if [ $INDEX -eq -1 ]; then
+if [ $INDEX -le 0 ]; then
     mongosh --host mongodb.rkaka87.online --quiet < /app/db/master-data.js | tee -a $LOG_FILE
     VALIDATE $? "Loading Catalogue Data into MongoDB"
 else
