@@ -22,7 +22,10 @@ VALIDATE() {
 
 # First Check user account is with root priveliges
 USER_ID=$(id -u)
-VALIDATE $? "Checking User ID"
+if [ $USER_ID -ne 0 ]; then
+    echo -n "you should be a root user account priveligies to run this script"
+    exit 1
+fi
 
 #Check log directory
 if [ ! d $LOG_DIR ]; then
