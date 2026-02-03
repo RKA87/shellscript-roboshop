@@ -6,11 +6,19 @@ GREEN="\e[32m"
 YELLOW="\e[33m"
 RESET="\e[0m"
 
-LOG_DIR="/var/log/shellscript-roboshop"
+# First Check user account is with root priveliges
+USER_ID=$(id -u)
+if [ $USER_ID -ne 0 ]; then
+    echo -n "you should be a root user account priveligies to run this script"
+    exit 1
+fi
+
+#Creating log directory
+LOG_DIR=/var/log/shellscript-roboshop
+mkdir -p $LOG_DIR
 LOG_FILE="$LOG_DIR/mongodb.log"
 
 #Function to check the validation/status
-
 VALIDATE() {
     if [ $1 -ne 0 ]; then
         echo -e "$2 ... $RED FAILED $RESET" | tee -a $LOG_FILE
@@ -19,21 +27,6 @@ VALIDATE() {
         echo -e "$2 ... $GREEN SUCCESS $RESET" | tee -a $LOG_FILE
     fi
 }
-
-# First Check user account is with root priveliges
-USER_ID=$(id -u)
-if [ $USER_ID -ne 0 ]; then
-    echo -n "you should be a root user account priveligies to run this script"
-    exit 1
-fi
-
-#Check log directory
-if [ ! d $LOG_DIR ]; then
-    echo -n "Creating log directory"
-    mkdir $LOG_DIR
-else
-    echo -n "log directory already exists"
-fi
 
 cp mongo.repo /etc/yum.repos.d/mongo.repo &>>$LOG_FILE
 VALIDATE $? "Copying MongoDB Repo File"
