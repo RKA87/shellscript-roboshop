@@ -26,11 +26,11 @@ mkdir -p /app
 #Status Check Function
 STAT_CHECK() {
   if [ $1 -ne 0 ]; then
-    echo -e "$RED FAILURE $NOCOLOR"
+    echo -e "$RED $2 FAILURE $NOCOLOR"
     echo -e "$YELLOW Check the log file for more information $NOCOLOR"
     exit 1
   else
-    echo -e "$GREEN ..SUCCESS.. $NOCOLOR"
+    echo -e "$GREEN $2 ..SUCCESS.. $NOCOLOR"
   fi
 }
 
