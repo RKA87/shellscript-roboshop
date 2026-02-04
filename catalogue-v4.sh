@@ -47,7 +47,7 @@ else
   STAT_CHECK $? "Installing Nodejs"
 fi
 
-id roboshop
+id roboshop &>>$LOG_FILE
 if [ $? -ne 0 ]; then
   useradd --system --home /app --shell /sbin/nologin --comment "roboshop system user" roboshop &>>$LOG_FILE
   STAT_CHECK $? "Adding Roboshop User"
@@ -56,6 +56,7 @@ else
 fi
 
 mkdir -p /app
+STAT_CHECK $? "Creating App Directory"
 
 #Create App Directory and download the code
 curl -o /tmp/catalogue.zip https://roboshop-artifacts.s3.amazonaws.com/catalogue-v3.zip  &>>$LOG_FILE
@@ -92,7 +93,6 @@ dnf install mongodb-mongosh -y &>>$LOG_FILE
 INDEX=$(mongosh --host $MONGODB_HOST --quiet  --eval 'db.getMongo().getDBNames().indexOf("catalogue")')
 
 if [ $INDEX -le 0 ]; then
-    echo -e "$RED mongodb catalogue index data is not exist and executing the app data now $NOCOLOR}" | tee -a $LOG_FILE
     mongosh --host $MONGODB_HOST </app/db/master-data.js
     STAT_CHECK  $? "Loading products into Mongodb using Catalogue"
 else
