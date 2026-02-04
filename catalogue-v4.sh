@@ -64,6 +64,8 @@ cd /app
 STAT_CHECK $? "Changing Directory to /app"
 
 rm -rf /app/*
+STAT_CHECK $? "Remove exist app code from /app Directory"
+
 unzip /tmp/catalogue.zip &>>$LOG_FILE
 STAT_CHECK $? "Unzipping Catalogue Code" 
 
