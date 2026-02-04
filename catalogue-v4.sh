@@ -40,7 +40,7 @@ STAT_CHECK $? "Disable Nodejs Module"
 #Check Nodejs is already installed or not
 
 if dnf list installed nodejs &>>$LOG_FILE; then
-  echo -e "${YELLOW}Nodejs is already installed${NO}" | tee -a $LOG_FILE
+  echo -e "${YELLOW}Nodejs is already installed $NOCOLOR" | tee -a $LOG_FILE
 else
   dnf module enable nodejs:24 -y &>>$LOG_FILE
   dnf install nodejs -y &>>$LOG_FILE
@@ -52,7 +52,7 @@ if [ $? -ne 0 ]; then
   useradd --system --home /app --shell /sbin/nologin --comment "roboshop system user" roboshop &>>$LOG_FILE
   STAT_CHECK $? "Adding Roboshop User"
 else
-  echo -e "${YELLOW}Roboshop user already exists${NOCOLOR}" | tee -a $LOG_FILE
+  echo -e "$YELLOW Roboshop user already exists$NOCOLOR" | tee -a $LOG_FILE
 fi
 
 mkdir -p /app
