@@ -26,11 +26,11 @@ mkdir -p /app
 #Status Check Function
 STAT_CHECK() {
   if [ $1 -ne 0 ]; then
-    echo -e "$RED $2 FAILURE $NOCOLOR"
+    echo -e "$RED $2 FAILURE $NOCOLOR" | tee -a $LOG_FILE
     echo -e "$YELLOW Check the log file for more information $NOCOLOR"
     exit 1
   else
-    echo -e "$GREEN $2 ..SUCCESS.. $NOCOLOR"
+    echo -e "$GREEN $2 ..SUCCESS.. $NOCOLOR" | tee -a $LOG_FILE
   fi
 }
 
@@ -40,7 +40,7 @@ STAT_CHECK $? "Disable Nodejs Module"
 #Check Nodejs is already installed or not
 
 if dnf list installed nodejs &>>$LOG_FILE; then
-  echo -e "${YELLOW}Nodejs is already installed $NOCOLOR" | tee -a $LOG_FILE
+  echo -e "$YELLOW Nodejs is already installed $NOCOLOR" | tee -a $LOG_FILE
 else
   dnf module enable nodejs:24 -y &>>$LOG_FILE
   dnf install nodejs -y &>>$LOG_FILE
