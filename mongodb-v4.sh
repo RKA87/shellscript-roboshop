@@ -20,12 +20,12 @@ LOG_FILE="$LOG_DIR/mongodb.log"
 
 #Function to print status of the executed command
 STAT_CHECK() {
-  if [ $1 -ne 0 ]; then
-    echo -e "${RED}FAILURE${NO}" | tee -a $LOG_FILE
+  if [ "$1" -ne 0 ]; then
+    echo -e "${RED}$2 ... FAILURE${NO}" | tee -a "$LOG_FILE"
     echo -e "${YELLOW}Refer the log file for more information: $LOG_FILE${NO}"
     exit 1
   else
-    echo -e "${GREEN}SUCCESS${NO}" | tee -a $LOG_FILE
+    echo -e "${GREEN}$2 ... SUCCESS${NO}" | tee -a "$LOG_FILE"
   fi
 }
 
@@ -34,10 +34,10 @@ STAT_CHECK $? "Adding Mongodb Repo"
 
 #check the mongodb server is already installed or not
 
-if dnf list mongodb-org -y; then
+if dnf list installed mongodb-org &>>$LOG_FILE; then
   echo -e "${YELLOW}Mongodb is already installed${NO}" | tee -a $LOG_FILE
 else
-  dnf install -y mongodb-org | tee -a $LOG_FILE
+  dnf install mongodb-org -y &>>$LOG_FILE
   STAT_CHECK $? "Installing Mongodb"
 fi
 
@@ -48,7 +48,7 @@ systemctl start mongod &>>$LOG_FILE
 STAT_CHECK $? "Starting Mongodb Service"
 
 #Allow remote connections from /etc/mongod.conf
-sed 's/127.0.0.1/0.0.0.0/g' /etc/mongod.conf &>>$LOG_FILE
+sed -i 's/127.0.0.1/0.0.0.0/g' /etc/mongod.conf &>>$LOG_FILE
 STAT_CHECK $? "Allowing Remote Connections"
 
 systemctl restart mongod &>>$LOG_FILE
