@@ -30,7 +30,7 @@ STAT_CHECK() {
   fi
 }
 
-dnf module disbable nginx -y &>>$LOG_FILE
+dnf module disable nginx -y &>>$LOG_FILE
 STAT_CHECK $? "Disabling Nginx module"
 
 dnf module enable nginx:1.24 -y &>>$LOG_FILE
