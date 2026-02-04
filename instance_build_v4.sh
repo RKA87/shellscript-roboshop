@@ -11,13 +11,6 @@ GREEN="\e[32m"
 YELLOW="\e[33m"
 RESET="\e[0m"
 
-#check the user account has root privileges
-USER_ID=$(id -u)
-if [ $USER_ID -ne 0 ]; then
-  echo -e "$RED You should run this script as root user or with sudo privileges$RESET"
-  exit 1
-fi
-
 #Instance build with Route53 record creation
 for each_instance in $@
 do
