@@ -23,12 +23,12 @@ for each_instance in $@
 do
     echo -e "$YELLOW Creating EC2 Instance and Route53 record...$RESET"
     INSTANCE_ID=$( aws ec2 run-instances \
-        --image-id $AMI_ID \
-        --instance-type t3.micro \
-        --security-group-ids $SG_ID \
-        --tag-specifications "ResourceType=instance,Tags=[{Key=Name,Value=$each_instance}]" \
-        --query 'Instances[0].InstanceId' \
-        --output text )
+    --image-id $AMI_ID \
+    --instance-type "t3.micro" \
+    --security-group-ids $SG_ID \
+    --tag-specifications "ResourceType=instance,Tags=[{Key=Name,Value=$each_instance}]" \
+    --query 'Instances[0].InstanceId' \
+    --output text )
     echo -e "$GREEN Instance Created with Instance ID: $INSTANCE_ID $RESET"
     #wait till instance up and running
     aws ec2 wait instance-running --instance-ids $INSTANCE_ID
@@ -37,8 +37,8 @@ do
         IP_ADDRESS=$(
             aws ec2 describe-instances \
             --instance-ids $INSTANCE_ID \
-            --query 'Reservations[0].Instances[0].PublicIpAddress' \
-            --output text 
+            --query 'Reservations[].Instances[].PublicIpAddress' \
+            --output text
             )
         echo -e "$GREEN Instance created with Instance ID: $INSTANCE_ID and Public IP: $IP_ADDRESS $RESET"
         RECORD_NAME="webapp.$DOMAIN_NAME"
@@ -46,8 +46,8 @@ do
         IP_ADDRESS=$(
             aws ec2 describe-instances \
             --instance-ids $INSTANCE_ID \
-            --query 'Reservations[0].Instances[0].PrivateIpAddress' \
-            --output text 
+            --query 'Reservations[].Instances[].PrivateIpAddress' \
+            --output text
             )
         echo -e "$GREEN Instance created with Instance ID: $INSTANCE_ID and Private IP: $IP_ADDRESS $RESET"
         RECORD_NAME="$each_instance.$DOMAIN_NAME"
