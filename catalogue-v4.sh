@@ -90,14 +90,29 @@ cp $SCRIPT_DIR/mongo.repo /etc/yum.repos.d/mongo.repo
 dnf install mongodb-mongosh -y &>>$LOG_FILE
 
 #Update the MongoDB Endpoint in Catalogue Service File
+# INDEX=$(mongosh --host $MONGODB_HOST --quiet  --eval 'db.getMongo().getDBNames().indexOf("catalogue")')
+
+# if [ $INDEX -le 0 ]; then
+#     mongosh --host $MONGODB_HOST </app/db/master-data.js
+#     STAT_CHECK  $? "Loading products into Mongodb using Catalogue"
+# else
+#     echo -e "$GREEN mongodb catalogue index data is already exist hence skipping the app data loading $NOCOLOR" | tee -a $LOG_FILE
+# fi
+
+# systemctl restart catalogue &>>$LOG_FILE
+# STAT_CHECK $? "Restarting Catalogue Service"
+
+cp $SCRIPT_DIR/mongo.repo /etc/yum.repos.d/mongo.repo
+dnf install mongodb-mongosh -y &>>$LOGS_FILE
+
 INDEX=$(mongosh --host $MONGODB_HOST --quiet  --eval 'db.getMongo().getDBNames().indexOf("catalogue")')
 
 if [ $INDEX -le 0 ]; then
     mongosh --host $MONGODB_HOST </app/db/master-data.js
-    STAT_CHECK  $? "Loading products into Mongodb using Catalogue"
+    VALIDATE $? "Loading products"
 else
-    echo -e "$GREEN mongodb catalogue index data is already exist hence skipping the app data loading $NOCOLOR" | tee -a $LOG_FILE
+    echo -e "$YELLOW Products already loaded ... SKIPPING $NOCOLOR" | tee -a $LOG_FILE
 fi
 
 systemctl restart catalogue &>>$LOG_FILE
-STAT_CHECK $? "Restarting Catalogue Service"
+STAT_CHECK $? "Restarting catalogue"
