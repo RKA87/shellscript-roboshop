@@ -12,7 +12,7 @@ mkdir -p $LOG_DIR
 LOG_FILE="$LOG_DIR/catalogue.log"
 
 SCRIPT_DIR=$PWD
-MONGODB_HOST=mongodb.daws88s.online
+MONGODB_HOST=mongodb.rkak87.online
 
 #Check the user account has root privileges
 ID=$(id -u)
@@ -103,7 +103,7 @@ dnf install mongodb-mongosh -y &>>$LOG_FILE
 # STAT_CHECK $? "Restarting Catalogue Service"
 
 cp $SCRIPT_DIR/mongo.repo /etc/yum.repos.d/mongo.repo
-dnf install mongodb-mongosh -y &>>$LOGS_FILE
+dnf install mongodb-mongosh -y &>>$LOG_FILE
 
 INDEX=$(mongosh --host $MONGODB_HOST --quiet  --eval 'db.getMongo().getDBNames().indexOf("catalogue")')
 
