@@ -6,6 +6,7 @@ GREEN="\e[32m"
 YELLOW="\e[33m"
 RESET="\e[0m"
 SCRIPT_DIR=$(pwd)
+MONGODB_HOST="mongodb.rkak87.online"
 
 #First Check user account has root priveliges
 USER_ID=$(id -u)
@@ -89,12 +90,13 @@ VALIDATE $? "Copying MongoDB Repo File"
 dnf install mongodb-mongosh -y &>>$LOG_FILE
 VALIDATE $? "Installing MongoDB Shell"
 
-INDEX=$(mongosh --host mongodb.rkaka87.online --quiet --eval 'db.getDBNames().indexOf("catalogue")')
+INDEX=$(mongosh --host $MONGODB_HOST --quiet  --eval 'db.getMongo().getDBNames().indexOf("catalogue")')
+
 if [ $INDEX -le 0 ]; then
-    mongosh --host mongodb.rkaka87.online --quiet < /app/db/master-data.js | tee -a $LOG_FILE
-    VALIDATE $? "Loading Catalogue Data into MongoDB"
+    mongosh --host $MONGODB_HOST </app/db/master-data.js
+    VALIDATE $? "Loading products"
 else
-    echo -e "$YELLOW Catalogue Database is already present, So we are skipping the data loading step $RESET" | tee -a $LOG_FILE
+    echo -e "Products already loaded ... $YELLOW SKIPPING $RESET"
 fi
 
 systemctl restart catalogue &>>$LOG_FILE
