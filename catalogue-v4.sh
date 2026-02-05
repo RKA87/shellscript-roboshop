@@ -86,9 +86,6 @@ STAT_CHECK $? "Enabling Catalogue Service"
 systemctl start catalogue &>>$LOG_FILE
 STAT_CHECK $? "Starting Catalogue Service"
 
-cp $SCRIPT_DIR/mongo.repo /etc/yum.repos.d/mongo.repo
-dnf install mongodb-mongosh -y &>>$LOG_FILE
-
 #Update the MongoDB Endpoint in Catalogue Service File
 # INDEX=$(mongosh --host $MONGODB_HOST --quiet  --eval 'db.getMongo().getDBNames().indexOf("catalogue")')
 
@@ -103,13 +100,16 @@ dnf install mongodb-mongosh -y &>>$LOG_FILE
 # STAT_CHECK $? "Restarting Catalogue Service"
 
 cp $SCRIPT_DIR/mongo.repo /etc/yum.repos.d/mongo.repo
+STAT_CHECK $? "Copying Mongo Repo File"
+
 dnf install mongodb-mongosh -y &>>$LOG_FILE
+STAT_CHECK $? "Installing Mongodb Shell"
 
 INDEX=$(mongosh --host $MONGODB_HOST --quiet  --eval 'db.getMongo().getDBNames().indexOf("catalogue")')
 
 if [ $INDEX -le 0 ]; then
     mongosh --host $MONGODB_HOST </app/db/master-data.js
-    VALIDATE $? "Loading products"
+    STAT_CHECK $? "Loading products"
 else
     echo -e "$YELLOW Products already loaded ... SKIPPING $NOCOLOR" | tee -a $LOG_FILE
 fi
