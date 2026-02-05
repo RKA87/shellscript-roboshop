@@ -8,7 +8,7 @@ NO="\e[0m"
 
 #Check user is root or not
 USER_ID=$(id -u)
-if [ USER_ID -ne 0 ]; then
+if [ $USER_ID -ne 0 ]; then
   echo -e "${RED}You should be root user to execute this script${NC}"
   exit 1
 fi
