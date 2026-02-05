@@ -73,7 +73,7 @@ STAT_CHECK $? "Installing Nodejs Dependencies"
 #configure the user systemctl service
 cp $SCRIPT_DIR/user.service /etc/systemd/system/user.service | tee -a $LOG_FILE
 STAT_CHECK $? "created systemctl User Service"
-
+    
 systemctl daemon-reload &>>$LOG_FILE
 STAT_CHECK $? "Reloading Systemd Services"
 
