@@ -49,7 +49,7 @@ if [ $? -ne 0 ]; then
     useradd --system --home /app --shell /sbin/nologin --comment "roboshop system user" roboshop | tee -a $LOG_FILE
     STAT_CHECK $? "Adding roboshop user"
 else
-    echo -e "${GREEN}roboshop user already exists${NC}" | tee -a $LOG_FILE
+    echo -e "$GREEN roboshop user already exists $NC" | tee -a $LOG_FILE
 fi
 
 #create application directory
