@@ -18,6 +18,16 @@ mkdir -p $LOG_DIR
 
 LOG_FILE="$LOG_DIR/mysql.log"
 
+#function to check the status of the command
+STAT_CHECK() {
+  if [ $1 -eq 0 ]; then
+    echo -e "$GREEN Success $NOCOLOR"
+  else
+    echo -e "$RED Failure $NOCOLOR"
+    exit 1
+  fi
+}
+
 #check DNF Install of mysql server
 
 if dnf list installed mysql-server &>>$LOG_FILE; then
