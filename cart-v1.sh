@@ -16,7 +16,7 @@ if [ $USER_ID -ne 0 ]; then
 fi
 
 #Log Directory
-LOG_DIR="/tmp/roboshop/shellscript-roboshop"
+LOG_DIR="/var/log/shellscript-roboshop"
 mkdir -p $LOG_DIR
 
 LOG_FILE="$LOG_DIR/cart.log"
@@ -24,11 +24,11 @@ LOG_FILE="$LOG_DIR/cart.log"
 #Function to print status of the executed command
 STAT_CHECK(){
     if [ $1 -ne 0 ]; then
-      echo -e "${RED}$2 ... FAILURE${NC}" | tee -a "$LOG_FILE"
-      echo -e "${YELLOW}Refer the log file for more information: $LOG_FILE${NO}"
+      echo -e "$RED $2 ... FAILURE${NC}" | tee -a "$LOG_FILE"
+      echo -e "$YELLOW Refer the log file for more information: $LOG_FILE $NO"
       exit 1
     else
-      echo -e "${GREEN}$2 ... SUCCESS${NC}" | tee -a "$LOG_FILE"
+      echo -e "$GREEN $2 ... SUCCESS${NC}" | tee -a "$LOG_FILE"
     fi
 }
 
@@ -36,7 +36,7 @@ dnf module disable nodejs -y | tee -a $LOG_FILE
 STAT_CHECK $? "Disable NodeJS module"
 
 if dnf list installed nodejs &>>$LOG_FILE; then
-    echo -e "${GREEN}Nodejs is already installed${NC}" | tee -a $LOG_FILE
+    echo -e "$YELLOW Nodejs is already installed${NC}" | tee -a $LOG_FILE
 else
     dnf module enable nodejs:24 -y | tee -a $LOG_FILE
     STAT_CHECK $? "Enable NodeJS module"
