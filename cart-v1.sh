@@ -6,6 +6,8 @@ GREEN="\e[32m"
 YELLOW="\e[33m"
 NC="\e[0m"
 
+SCRIPT_DIR=$PWD
+
 #check root user access
 USER_ID=$(id -u)
 if [ $USER_ID -ne 0 ]; then
