@@ -5,7 +5,7 @@ RED="\e[31m"
 GREEN="\e[32m"
 YELLOW="\e[33m"
 NOCOLOR="\e[0m"
-$SCRIPT_DIR=$(pwd)
+SCRIPT_DIR=$(pwd)
 
 #CHECK ROOT USER ACCESS
 USER_ID=$(id -u)
