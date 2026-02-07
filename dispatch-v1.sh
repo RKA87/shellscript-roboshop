@@ -34,17 +34,16 @@ STAT_CHECK() {
 #add user account for application
 id roboshop &>>$LOG_FILE
 if [ $? -ne 0 ]; then
-  echo -e "${YELLOW}User roboshop already exists${NOCOLOR}" | tee -a $LOG_FILE
-else
   useradd --system --home /app --shell /sbin/nologin --comment "roboshop system user" roboshop &>>$LOG_FILE
-  STAT_CHECK $? "Adding roboshop user"
+  STAT_CHECK $? "Adding Roboshop User"
+else
+  echo -e "${YELLOW}Roboshop user already exists${NOCOLOR}" | tee -a $LOG_FILE
 fi
 
 #check the golang is installed or not
 if dnf list installed golang &>/dev/null; then
   echo -e "${GREEN}Golang is already installed${NOCOLOR}"
 else
-  echo -e "${YELLOW}Installing Golang...${NOCOLOR}"
   dnf install golang -y &>>$LOG_FILE
   STAT_CHECK $? "Installing Golang"
 fi
@@ -58,6 +57,9 @@ STAT_CHECK $? "Downloading Dispatch Application Code"
 
 cd /app &>>$LOG_FILE
 STAT_CHECK $? "Changing Directory to /app"
+
+rm -rf /app/*
+STAT_CHECK $? "Remove exist app code from /app Directory"
 
 unzip /tmp/dispatch.zip &>>$LOG_FILE
 STAT_CHECK $? "Extracting Dispatch Application Code"
