@@ -83,3 +83,30 @@ STAT_CHECK $? "Enabling Shipping Service"
 
 systemctl start shipping &>>$LOG_FILE
 STAT_CHECK $? "Starting Shipping Service"
+
+#need to load the scehma from sqldb
+if dnf list installed mysql &>>$LOG_FILE; then
+  echo -e "${YELLOW}MySQL client is already installed${NOCOLOR}" | tee -a $LOG_FILE
+else
+  dnf install mysql -y &>>$LOG_FILE
+  STAT_CHECK $? "Installing MySQL Client"
+fi
+
+mysql -h mysql.roboshop.internal -uroot -pRoboShop@1 < /app/db/schema.sql &>>$LOG_FILE
+STAT_CHECK $? "Loading Shipping Schema"
+
+mysql -h mysql.roboshop.internal -uroot -pRoboShop@1 < /app/db/app-user.sql &>>$LOG_FILE
+STAT_CHECK $? "Loading Shipping User data"
+
+mysql -h mysql.roboshop.internal -uroot -pRoboShop@1 < /app/db/master-data.sql &>>$LOG_FILE
+STAT_CHECK $? "Loading Shipping Master Data"
+
+#restart the shippig service
+systemctl daemon-reload &>>$LOG_FILE
+STAT_CHECK $? "Reloading Shipping Service"
+
+systemctl enable shipping &>>$LOG_FILE
+STAT_CHECK $? "Enabling Shipping Service"
+
+systemctl restart shipping &>>$LOG_FILE
+STAT_CHECK $? "Restarting Shipping Service"
