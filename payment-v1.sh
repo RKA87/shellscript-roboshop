@@ -16,14 +16,14 @@ fi
 LOG_DIR="/var/log/shellscript-roboshop"
 mkdir -p $LOG_DIR
 
-LOG_FILE="$LOG_DIR/payment-v1.log"
+LOG_FILE="$LOG_DIR/payment.log"
 
 # Function to log messages
 STAT_CHECK() {
   if [ $1 -eq 0 ]; then
-    echo -e "${GREEN}SUCCESS${NOCOLOR}"
+    echo -e "${GREEN}$2 ... SUCCESS ${NOCOLOR}"
   else
-    echo -e "${RED}FAILURE${NOCOLOR}"
+    echo -e "${RED}$2 ... FAILED ${NOCOLOR}"
     exit 1
   fi
 }
@@ -39,12 +39,12 @@ else
 fi
 
 # Check python3 is installed
-if dnf list installed python3 &>/dev/null; then
+if dnf list installed python3 &>>$LOG_FILE; then
   echo -e "${GREEN}Python3 is already installed${NOCOLOR}"
 else
   echo -e "${YELLOW}Installing Python3...${NOCOLOR}"
   dnf install python3 gcc python3-devel -y &>>$LOG_FILE
-  STAT_CHECK $?
+  STAT_CHECK $? "Installing Python3"
 fi
 
 #create application directory and download the application code
