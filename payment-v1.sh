@@ -38,12 +38,12 @@ else
 fi
 
 # Check python3 is installed
-if dnf list installed python3 &>>$LOG_FILE; then
-  echo -e "${GREEN}Python3 is already installed${NOCOLOR}"
+if dnf list installed python3 gcc python3-devel python3-pip redhat-rpm-config -y &>>$LOG_FILE; then
+  echo -e "${GREEN} Python3 and other dependencies are already installed${NOCOLOR}"
 else
-  echo -e "${YELLOW}Installing Python3...${NOCOLOR}"
-  dnf install python3 gcc python3-devel -y &>>$LOG_FILE
-  STAT_CHECK $? "Installing Python3"
+  echo -e "${YELLOW}Installing Python3 and dependencies...${NOCOLOR}"
+  dnf install python3 gcc python3-devel python3-pip redhat-rpm-config -y &>>$LOG_FILE
+  STAT_CHECK $? "Installing Python3 and its dependencies"
 fi
 
 #create application directory and download the application code
