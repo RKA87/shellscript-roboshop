@@ -11,6 +11,8 @@ USER_ID=$(id -u)
 if [ $USER_ID -ne 0 ]; then
   echo -e "${RED}You should run this script as root user or with sudo access${NOCOLOR}"
   exit 1
+else
+  echo -e "${GREEN}You are running the script with root user access${NOCOLOR}"
 fi
 
 LOG_DIR="var/log/shellscript-roboshop"
@@ -34,7 +36,7 @@ STAT_CHECK() {
 id roboshop &>>$LOG_FILE
 if [ $? -ne 0 ]; then
   useradd --system --home /app --shell /sbin/nologin --comment "roboshop system user" roboshop &>>$LOG_FILE
-  STAT_CHECK $? "Adding roboshop user"
+  STAT_CHECK $? "Adding roboshop user account"
 else
   echo -e "${YELLOW}User roboshop already exists${NOCOLOR}" | tee -a $LOG_FILE
 fi
