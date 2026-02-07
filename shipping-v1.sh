@@ -93,13 +93,13 @@ else
   STAT_CHECK $? "Installing MySQL Client"
 fi
 
-mysql -h mysql.roboshop.internal -uroot -pRoboShop@1 < /app/db/schema.sql &>>$LOG_FILE
+mysql -h mysqldb.rkak87.online -uroot -pRoboShop@1 < /app/db/schema.sql &>>$LOG_FILE
 STAT_CHECK $? "Loading Shipping Schema"
-
-mysql -h mysql.roboshop.internal -uroot -pRoboShop@1 < /app/db/app-user.sql &>>$LOG_FILE
+  
+mysql -h mysqldb.rkak87.online -uroot -pRoboShop@1 < /app/db/app-user.sql &>>$LOG_FILE
 STAT_CHECK $? "Loading Shipping User data"
 
-mysql -h mysql.roboshop.internal -uroot -pRoboShop@1 < /app/db/master-data.sql &>>$LOG_FILE
+mysql -h mysqldb.rkak87.online -uroot -pRoboShop@1 < /app/db/master-data.sql &>>$LOG_FILE
 STAT_CHECK $? "Loading Shipping Master Data"
 
 #restart the shippig service
