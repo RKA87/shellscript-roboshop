@@ -33,10 +33,10 @@ STAT_CHECK() {
 #add user account for application
 id roboshop &>>$LOG_FILE
 if [ $? -ne 0 ]; then
-  echo -e "${YELLOW}User roboshop already exists${NOCOLOR}" | tee -a $LOG_FILE
-else
   useradd --system --home /app --shell /sbin/nologin --comment "roboshop system user" roboshop &>>$LOG_FILE
   STAT_CHECK $? "Adding roboshop user"
+else
+  echo -e "${YELLOW}User roboshop already exists${NOCOLOR}" | tee -a $LOG_FILE
 fi
 
 #Install Maven for Java application
