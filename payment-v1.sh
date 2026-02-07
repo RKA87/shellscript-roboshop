@@ -5,6 +5,7 @@ RED="\e[31m"
 GREEN="\e[32m"
 YELLOW="\e[33m"
 NOCOLOR="\e[0m"
+$SCRIPT_DIR=$(pwd)
 
 #CHECK ROOT USER ACCESS
 USER_ID=$(id -u)
@@ -38,13 +39,8 @@ else
 fi
 
 # Check python3 is installed
-if dnf list installed python3 gcc python3-devel python3-pip redhat-rpm-config -y &>>$LOG_FILE; then
-  echo -e "${GREEN} Python3 and other dependencies are already installed${NOCOLOR}"
-else
-  echo -e "${YELLOW}Installing Python3 and dependencies...${NOCOLOR}"
-  dnf install python3 gcc python3-devel python3-pip redhat-rpm-config -y &>>$LOG_FILE
-  STAT_CHECK $? "Installing Python3 and its dependencies"
-fi
+dnf install python3 gcc python3-devel -y &>>$LOGS_FILE
+STAT_CHECK $? "Installing Python"
 
 #create application directory and download the application code
 mkdir -p /app &>>$LOG_FILE
@@ -66,6 +62,9 @@ STAT_CHECK $? "Extracting payment application code"
 cd /app &>>$LOG_FILE
 pip3 install -r requirements.txt &>>$LOG_FILE
 STAT_CHECK $? "Installing application dependencies"
+
+cp $SCRIPT_DIR/payment.service /etc/systemd/system/payment.service &>>$LOG_FILE
+STAT_CHECK $? "Copying payment systemd service file"
 
 #systemctl services
 systemctl daemon-reload &>>$LOG_FILE
