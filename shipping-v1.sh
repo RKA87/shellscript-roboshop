@@ -15,7 +15,7 @@ else
   echo -e "${GREEN}You are running the script with root user access${NOCOLOR}"
 fi
 
-LOG_DIR="var/log/shellscript-roboshop"
+LOG_DIR="/var/log/shellscript-roboshop"
 mkdir -p $LOG_DIR
 
 LOG_FILE="$LOG_DIR/shipping.log"
@@ -59,12 +59,11 @@ STAT_CHECK $? "Downloading Shipping Application Code"
 cd /app &>>$LOG_FILE
 STAT_CHECK $? "Changing Directory to /app"
 
+rm -rf /app/* &>>$LOG_FILE
+STAT_CHECK $? "Removing the existing application directory"
+
 unzip /tmp/shipping.zip &>>$LOG_FILE
 STAT_CHECK $? "Extracting Shipping Application Code"
-
-#Build the application
-cd /app &>>$LOG_FILE
-STAT_CHECK $? "Changing Directory to /app"
 
 #dependencies to be install
 mvn clean package &>>$LOG_FILE
