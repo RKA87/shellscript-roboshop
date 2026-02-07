@@ -39,7 +39,7 @@ else
 fi
 
 # Check python3 is installed
-dnf install python3 gcc python3-devel -y &>>$LOGS_FILE
+dnf install python3 gcc python3-devel -y &>>$LOG_FILE
 STAT_CHECK $? "Installing Python"
 
 #create application directory and download the application code
