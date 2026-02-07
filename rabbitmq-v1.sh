@@ -22,10 +22,10 @@ SCRIPT_DIR=$(pwd)
 #FUNCTION TO CHECK STATUS
 STAT_CHECK() {
   if [ $1 -ne 0 ]; then
-    echo -e "${RED}Failed${NOCOLOR}"
+    echo -e "${RED}$2 ... FAILED ${NOCOLOR}"
     exit 1
   else
-    echo -e "${GREEN}Success${NOCOLOR}"
+    echo -e "${GREEN}$2 ... SUCCESS ${NOCOLOR}"
   fi
 }
 
@@ -36,9 +36,9 @@ STAT_CHECK $? "Copying RabbitMQ repo file"
 #installing rabbitmq server
 
 if dnf list installed | grep rabbitmq-server &>>$LOG_FILE; then
-  echo -e "${YELLOW}RabbitMQ server is already installed${NOCOLOR}"
+  echo -e "${YELLOW}RabbitMQ server is already installed${NOCOLOR}" | tee -a $LOG_FILE
 else
-  echo -e "${YELLOW}Installing RabbitMQ server${NOCOLOR}"
+  echo -e "${YELLOW}Installing RabbitMQ server${NOCOLOR}" | tee -a $LOG_FIL
   dnf install rabbitmq-server -y &>>$LOG_FILE
   STAT_CHECK $? "Installing RabbitMQ server"
 fi
