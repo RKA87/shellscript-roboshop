@@ -31,7 +31,6 @@ STAT_CHECK() {
 #create system account for application
 id roboshop &>/dev/null
 if [ $? -ne 0 ]; then
-  echo -e "${YELLOW}Creating system user 'roboshop'...${NOCOLOR}"
   useradd --system --home /app --shell /sbin/nologin --comment "roboshop system user" roboshop &>>$LOG_FILE
   STAT_CHECK $? "Creating system user 'roboshop'"
 else
@@ -56,6 +55,9 @@ STAT_CHECK $? "Downloading payment application code"
 
 cd /app &>>$LOG_FILE
 STAT_CHECK $? "Changing directory to /app"
+
+rm -rf /app/*
+STAT_CHECK $? "Remove exist app code from /app Directory"
 
 unzip /tmp/payment.zip &>>$LOG_FILE
 STAT_CHECK $? "Extracting payment application code"
